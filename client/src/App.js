@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import myContractJSON from "./artifacts/contracts/DDrive.sol/DDrive.json";
 import FileUpload from "./components/FileUpload.jsx";
+import DisplayFiles from "./components/DisplayFiles.jsx";
 
 function App() {
   const [contract, setContract] = useState();
@@ -62,20 +63,19 @@ function App() {
   }, []);
 
   return (
-    <div className="bg-[#323034] h-[100vh] flex justify-center items-center text-white">
-      {address ? (
-        <div className="flex flex-col justify-center items-start">
+    <div className=" bg-[#212121] h-[100vh] w-[100vw] flex flex-row justify-around items-center text-white">
+      <div className="flex flex-col">
+        <div>
           <h1>Addres: {address}</h1>
           <h1>Balance: {balance} Eth</h1>
-          <FileUpload
-            contract={contract}
-            provider={provider}
-            address={address}
-          ></FileUpload>
         </div>
-      ) : (
-        <h1>"Connect using metamask"</h1>
-      )}
+        <FileUpload
+          contract={contract}
+          provider={provider}
+          address={address}
+        ></FileUpload>
+      </div>
+      <DisplayFiles contract={contract} address={address}></DisplayFiles>
     </div>
   );
 }
