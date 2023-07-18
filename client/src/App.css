@@ -2,22 +2,55 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* SCROLLBAR STYLING */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 5px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #031927;
+  background: #160d35;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #80e38f;
-  border-radius: 9px;
+  background: #b30805;
+  border-radius: 6px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: rgb(89, 234, 111);
+  background: rgb(255, 38, 0);
+}
+
+.blue-glassmorphism {
+  background: rgba(254, 251, 251, 0.4);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(123, 116, 252, 0.3);
+}
+
+/* white glassmorphism */
+.white-glassmorphism {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.eth-card {
+  background: rgb(0, 0, 0);
+  background: linear-gradient(
+    194deg,
+    rgb(39, 10, 114) 31%,
+    rgb(0, 0, 0) 100%
+  );
 }

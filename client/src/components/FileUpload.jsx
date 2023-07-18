@@ -38,13 +38,12 @@ const FileUpload = ({ contract, provider, address }) => {
 
         const ImgHash = `https://gateway.pinata.cloud/ipfs/${resFile.data.IpfsHash}`;
 
+        //  adding image hash to my contract
         contract.add(address, ImgHash);
 
         setFileName("No image selected");
         setFile(null);
-
         setLoading(false);
-
         toast.success("Image Uploaded Successfully!");
       } catch (err) {
         toast.error("Oops! image not uploaded on Pinata.");
@@ -118,14 +117,17 @@ const FileUpload = ({ contract, provider, address }) => {
             <p className=" text-[#cbcdbb]">{fileName.substring(0, 26)}..</p>
           </div>
         </label>
-        {loading && <Loader></Loader>}
-        <button
-          className="my-5 bg-[#3a4042] px-5 py-2 rounded-md"
-          type="submit"
-          disabled={!file}
-        >
-          Upload file
-        </button>
+        {loading ? (
+          <Loader></Loader>
+        ) : (
+          <button
+            className="my-5 border border-3 hover:bg-sky-950 px-5 py-2 rounded-md cursor-pointer"
+            type="submit"
+            disabled={!file}
+          >
+            Upload file
+          </button>
+        )}
 
         {dragActive && (
           <div
