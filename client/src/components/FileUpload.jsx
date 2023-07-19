@@ -92,7 +92,7 @@ const FileUpload = ({ contract, provider, address }) => {
   };
 
   return (
-    <div className="my-5">
+    <div className="flex flex-col items-center justify-center w-[90vw] xl:w-fit">
       <form
         id="form-file-upload"
         onDragEnter={handleDrag}

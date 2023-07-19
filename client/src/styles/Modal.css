@@ -1,0 +1,22 @@
+.modalBackground {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(20, 20, 20, 0.59);
+  position: fixed;
+  top: 50px;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalContainer {
+  width: 500px;
+  height: 250px;
+  border-radius: 12px;
+  background-color: rgb(255, 255, 255);
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  display: flex;
+  flex-direction: column;
+  padding: 25px;
+}

@@ -1,9 +1,9 @@
 import React from "react";
 import { useState } from "react";
 
-const ImageCard = ({ image, i }) => {
+const ImageCard = ({ image, key }) => {
   return (
-    <div key={i} className=" bg-black h-96 w-80 rounded-lg p-2 m-2">
+    <div key={key} className=" bg-black h-96 w-80 rounded-lg p-2 m-2">
       <a href={image} target="_blank" rel="noreferrer" className="">
         <img src={image} alt="loading.." className="w-full h-full" />
       </a>
@@ -25,7 +25,7 @@ const DisplayFiles = ({ contract, address }) => {
       myImages = myImages.toString().split(",");
 
       const images = myImages.map((image, i) => {
-        return <ImageCard image={image} i={i}></ImageCard>;
+        return <ImageCard image={image} key={i}></ImageCard>;
       });
       setData(images);
     } catch (err) {
@@ -34,7 +34,7 @@ const DisplayFiles = ({ contract, address }) => {
   };
 
   return (
-    <div className="flex flex-col items-center mt-5 h-[100vh]">
+    <div className="flex flex-col items-center mt-10 h-[100vh]">
       <div className="flex flex-row mb-10">
         <input
           type="text"
@@ -48,7 +48,17 @@ const DisplayFiles = ({ contract, address }) => {
           Get Data
         </button>
       </div>
-      <hr class="mt-12 border-1 border-blue-500 cursor-pointer hover:border-red-500 duration-500 w-[50vw]" />
+      
+
+      {address ? (
+        <h3 className="text-white text-3xl mt-10 text-center">
+          Your Files
+        </h3>
+      ) : (
+        <h3 className="text-white text-3xl mt-10 text-center">
+          Connect account to your see latest transactions
+        </h3>
+      )}
       <div className="mt-5 flex flex-row flex-wrap justify-center">{data}</div>
     </div>
   );

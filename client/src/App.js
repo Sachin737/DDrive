@@ -6,44 +6,7 @@ import FileUpload from "./components/FileUpload.jsx";
 import DisplayFiles from "./components/DisplayFiles.jsx";
 import Header from "./components/Header";
 
-import { SiEthereum } from "react-icons/si";
-import { BsInfoCircle } from "react-icons/bs";
-
-const WalletCard = ({ address, balance }) => {
-  const [network, setNetwork] = useState("Ethereum");
-
-  const getChain = async () => {
-    const Ntwrk = (await ethers.getDefaultProvider().getNetwork()).name;
-    setNetwork(Ntwrk);
-  };
-
-  useState(() => {
-    getChain();
-  }, []);
-  return (
-    <div className="flex-col justify-end items-start rounded-xl h-48 w-full sm:w-80 my-5 p-3 blue-glassmorphism eth-card">
-      <div className="flex flex-col justify-between w-full h-full">
-        <div className="flex justify-between items-center">
-          <div className=" flex justify-center items-center w-10 h-10 rounded-full border-2 border-white">
-            <SiEthereum fontSize={21} color="#fff"></SiEthereum>
-          </div>
-          <BsInfoCircle fontSize={18} color="#fff"></BsInfoCircle>
-        </div>
-        <div>
-          {!address ? (
-            <p className="text-white font-light text-sm">0x000....000</p>
-          ) : (
-            <p className="text-white font-light text-sm">
-              {address.substr(0, 5)}...
-              {address.substr(address.length - 4)}
-            </p>
-          )}
-          <p className="text-white font-semibold text-lg mt-1">{network}</p>
-        </div>
-      </div>
-    </div>
-  );
-};
+import { WalletCard } from "./components/WalletCard.jsx";
 
 function App() {
   const [contract, setContract] = useState();
@@ -91,9 +54,9 @@ function App() {
         setBalance(ethers.formatEther(mybalance));
       };
 
-      if (provider) {
+      try {
         loadContract();
-      } else {
+      } catch (err) {
         alert("Connect using metamask!");
       }
     };
@@ -103,8 +66,8 @@ function App() {
 
   return (
     <div className="bg-gradient-to-t from-gray-700 via-gray-900 to-black w-[100vw] flex flex-col justify-center items-center text-white overflow-x-hidden">
-      <Header></Header>
-      <div className="flex flex-row w-[70vw] h-[70vh] items-center justify-around">
+      <Header contract={contract}></Header>
+      <div className="flex flex-col xl:flex-row w-[70vw] h-[100vh] items-center justify-around">
         <WalletCard address={address} balance={balance}></WalletCard>
         <FileUpload
           contract={contract}
