@@ -13,13 +13,18 @@ const ImageCard = ({ image, key }) => {
 
 const DisplayFiles = ({ contract, address }) => {
   const [data, setData] = useState();
+  const [inputAddr, setinputAddr] = useState("");
 
   const getData = async () => {
     try {
-      const inputAddress = document.getElementsByClassName("address")[0].value;
-
       // get images for given addr using our smart contract
-      let myImages = await contract.displayItems(inputAddress || address);
+      let myImages;
+      if (inputAddr.length) {
+        myImages = await contract.displayItems(inputAddr);
+      } else {
+        myImages = await contract.displayItems(address);
+        console.log(myImages);
+      }
 
       //  converting object to string array
       myImages = myImages.toString().split(",");
@@ -33,6 +38,10 @@ const DisplayFiles = ({ contract, address }) => {
     }
   };
 
+  const handleInputChange = (e) => {
+    setinputAddr(e.target.value);
+  };
+
   return (
     <div className="flex flex-col items-center mt-10 h-[100vh]">
       <div className="flex flex-row mb-10">
@@ -40,6 +49,8 @@ const DisplayFiles = ({ contract, address }) => {
           type="text"
           className="address text-white p-1 mx-5 outline-none bg-transparent border-b-2"
           placeholder="Enter address"
+          value={inputAddr}
+          onChange={handleInputChange}
         />
         <button
           className="border border-3 hover:bg-sky-950 px-5 py-2 rounded-md cursor-pointer"
@@ -48,12 +59,9 @@ const DisplayFiles = ({ contract, address }) => {
           Get Data
         </button>
       </div>
-      
 
       {address ? (
-        <h3 className="text-white text-3xl mt-10 text-center">
-          Your Files
-        </h3>
+        <h3 className="text-white text-3xl mt-10 text-center">Your Files</h3>
       ) : (
         <h3 className="text-white text-3xl mt-10 text-center">
           Connect account to your see data !

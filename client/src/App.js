@@ -75,7 +75,7 @@ function App() {
     const provider = new ethers.BrowserProvider(ethereum);
 
     // Contract address (deployed on harhat network) and ABI code`
-    const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+    const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS;
     const contractABI = myContractJSON.abi;
 
     // signer to validate and pay for transactions
