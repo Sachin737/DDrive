@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Modal } from "./Modal.jsx";
 import logo from "../images/logo.png";
 
-const Header = ({ contract }) => {
+const Header = ({ contract, connectWallet, address }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [toggleMenu, setToggleMenu] = useState(false);
   return (
@@ -12,18 +12,29 @@ const Header = ({ contract }) => {
       {modalOpen && (
         <Modal setModalOpen={setModalOpen} contract={contract}></Modal>
       )}
-      <nav className="fixed top-0 z-10 backdrop-filter backdrop-blur-lg w-[100vw] flex justify-between md:justify-center items-center p-4">
+      <nav className="fixed top-0 z-10 backdrop-filter backdrop-blur-lg  w-[100vw] flex justify-between md:justify-center items-center p-4">
         <div className="md:flex-[0.5] flex-initial items-center justify-center mt-3">
           <img src={logo} alt="Logo" className="w-36 cursor-pointer" />
         </div>
         <ul className="text-white md:flex  hidden list-none flex-row justify-between items-center flex-initial">
           <li className={`mx-4 cursor-pointer`}>Home</li>
-          <li className={`mx-4 cursor-pointer`}>Docs</li>
           <li className={`mx-4 cursor-pointer`}>Contact</li>
-          <li className={`mx-4 cursor-pointer`}>Wallet</li>
+
+          {!address ? (
+            <li
+              className="bg-[#1016c2] text-white py-2 px-7 mx-4 cursor-pointer hover:bg-[#141bef] rounded-full"
+              onClick={() => connectWallet()}
+            >
+              Connect
+            </li>
+          ) : (
+            <li className="bg-[#08a212] text-white py-2 px-7 mx-4 cursor-pointer rounded-full">
+              Connected
+            </li>
+          )}
 
           <li
-            className="bg-[#c30808] text-white py-2 px-7 mx-4 cursor-pointer hover:bg-[#a60808] rounded-full"
+            className="bg-[#c30808] text-white py-2 px-7 mx-4 cursor-pointer hover:bg-[#ee0a0a] rounded-full"
             onClick={() => setModalOpen(true)}
           >
             Share
@@ -52,14 +63,23 @@ const Header = ({ contract }) => {
               </li>
 
               <li className={`mx-4 cursor-pointer my-2 text-lg`}>Home</li>
+              <li className={`mx-4 cursor-pointer my-2 text-lg`}>Contact</li>
+              {!address ? (
+                <li
+                  className="mx-4 cursor-pointer my-2 text-lg"
+                  onClick={() => connectWallet()}
+                >
+                  Connect
+                </li>
+              ) : (
+                <li className="mx-4 cursor-pointer my-2 text-lg">Connected</li>
+              )}
               <li
                 className={`mx-4 cursor-pointer my-2 text-lg`}
                 onClick={() => setModalOpen(true)}
               >
                 Share
               </li>
-              <li className={`mx-4 cursor-pointer my-2 text-lg`}>Contact</li>
-              <li className={`mx-4 cursor-pointer my-2 text-lg`}>Wallet</li>
             </ul>
           )}
         </div>

@@ -11,62 +11,109 @@ import { WalletCard } from "./components/WalletCard.jsx";
 function App() {
   const [contract, setContract] = useState();
   const [provider, setProvider] = useState("");
-  const [address, setAddress] = useState("0x0");
+  const [account, setAccount] = useState(null);
+  const [address, setAddress] = useState("");
   const [balance, setBalance] = useState(0);
 
-  useEffect(() => {
-    const connectToContract = async () => {
-      //  creating Provider to able to read data
-      const provider = new ethers.BrowserProvider(window.ethereum);
+  const { ethereum } = window;
 
-      const loadContract = async () => {
-        // reload page when we change our account or network from metamask
-        window.ethereum.on("chainChanged", () => {
-          window.location.reload();
-        });
-        window.ethereum.on("accountsChanged", () => {
-          window.location.reload();
-        });
+  // Checking acc connected or not
+  const ifWalletConnected = async () => {
+    if (!ethereum) {
+      return alert("Please install metamask!");
+    }
 
-        // Contract address (deployed on harhat network) and ABI code`
-        const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
-        const contractABI = myContractJSON.abi;
+    const accounts = await ethereum.request({ method: "eth_accounts" });
+    // console.log(accounts);
 
-        // signer to validate and pay for transactions
-        const signer = await provider.getSigner();
+    if (accounts.length !== 0) {
+      setAccount(accounts[0]);
+    }
 
-        // get signer address
-        const address = await signer.getAddress();
+    ethereum.on("chainChanged", () => {
+      window.location.reload();
+    });
+    ethereum.on("accountsChanged", () => {
+      window.location.reload();
+    });
+  };
 
-        // contarct instance
-        const myContract = new ethers.Contract(
-          contractAddress,
-          contractABI,
-          signer
-        );
-
-        // check account balance
-        const mybalance = await provider.getBalance(address);
-
-        setContract(myContract);
-        setProvider(provider);
-        setAddress(address);
-        setBalance(ethers.formatEther(mybalance));
-      };
-
-      try {
-        loadContract();
-      } catch (err) {
-        alert("Connect using metamask!");
+  //   Connect account
+  const connectWallet = async () => {
+    try {
+      if (!ethereum) {
+        return alert("Please install metamask!");
       }
-    };
 
-    connectToContract();
-  }, []);
+      const accounts = await ethereum.request({
+        method: "wallet_requestPermissions",
+        params: [{ eth_accounts: {} }],
+      });
+
+      loadContract();
+    } catch (err) {
+      if (err.code === 4001) {
+        // EIP-1193 userRejectedRequest error
+        // If this happens, the user rejected the connection request.
+        alert("Please connect to MetaMask.");
+      } else {
+        console.error(err);
+      }
+    }
+  };
+
+  const loadContract = async () => {
+    // reload page when we change our account or network from metamask
+    ethereum.on("chainChanged", () => {
+      window.location.reload();
+    });
+    ethereum.on("accountsChanged", () => {
+      window.location.reload();
+    });
+
+    //  creating Provider to able to read data
+    const provider = new ethers.BrowserProvider(ethereum);
+
+    // Contract address (deployed on harhat network) and ABI code`
+    const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+    const contractABI = myContractJSON.abi;
+
+    // signer to validate and pay for transactions
+    const signer = await provider.getSigner();
+
+    // get signer address
+    const address = await signer.getAddress();
+
+    // contarct instance
+    const myContract = new ethers.Contract(
+      contractAddress,
+      contractABI,
+      signer
+    );
+
+    // check account balance
+    const mybalance = await provider.getBalance(address);
+
+    setContract(myContract);
+    setProvider(provider);
+    setAddress(address);
+    setBalance(ethers.formatEther(mybalance));
+  };
+
+  useEffect(() => {
+    if (!account) ifWalletConnected();
+    if (account) {
+      loadContract();
+    }
+  }, [account]);
 
   return (
     <div className="bg-gradient-to-t from-gray-700 via-gray-900 to-black w-[100vw] flex flex-col justify-center items-center text-white overflow-x-hidden">
-      <Header contract={contract}></Header>
+      <Header
+        contract={contract}
+        connectWallet={connectWallet}
+        address={address}
+      ></Header>
       <div className="flex flex-col xl:flex-row w-[70vw] h-[100vh] items-center justify-around">
         <WalletCard address={address} balance={balance}></WalletCard>
         <FileUpload

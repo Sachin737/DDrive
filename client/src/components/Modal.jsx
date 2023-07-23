@@ -3,11 +3,36 @@ import { SlClose } from "react-icons/sl";
 
 const Modal = ({ setModalOpen, contract }) => {
   const sharing = async () => {
-    const address = document.getElementsByClassName("address")[0].value;
-    console.log(address);
-    await contract.giveAccess(address);
-    setModalOpen(false);
+    try {
+      const address = document.getElementsByClassName("address")[0].value;
+      await contract.giveAccess(address);
+      setModalOpen(false);
+    } catch (err) {
+      // console.log(err.code);
+      if (err.code === "ACTION_REJECTED") {
+        alert("Rejected from metamask!");
+      } else {
+        alert("already shared with this user.");
+      }
+    }
   };
+
+  const removing = async () => {
+    try {
+      const address = document.getElementsByClassName("dropdown")[0].value;
+      await contract.removeAccess(address);
+      setModalOpen(false);
+    } catch (err) {
+      alert("User already removed from share-list!");
+    }
+  };
+
+  const setAddress = () => {
+    const opt = document.getElementsByClassName("dropdown")[0];
+    const ip = document.getElementsByClassName("address")[0];
+    ip.value = opt.options[opt.selectedIndex].value.split(",")[0];
+  };
+
   useEffect(() => {
     const accessList = async () => {
       const addressList = await contract.getAccessList();
@@ -23,6 +48,7 @@ const Modal = ({ setModalOpen, contract }) => {
     };
     contract && accessList();
   }, [contract]);
+
   return (
     <>
       <div className="w-[100vw] h-[100vh] bg-[#0000006e] fixed top-12 z-10 flex items-center justify-center">
@@ -38,10 +64,11 @@ const Modal = ({ setModalOpen, contract }) => {
 
           <div className="">
             <select
-              className="bg-[rgb(228,228,228)] text-black py-2 px-10 rounded-lg"
+              className="dropdown bg-[rgb(228,228,228)] text-black py-2 px-2 rounded-lg"
               id="selectNumber"
+              onChange={() => setAddress()}
             >
-              <option className="option">People With Access</option>
+              <option className="option">Addresses</option>
             </select>
           </div>
 
@@ -52,7 +79,10 @@ const Modal = ({ setModalOpen, contract }) => {
           />
 
           <div className="flex justify-around items-center gap-10">
-            <button className="border border-3 bg-[#c30808] hover:bg-[#ee0a0a] px-5 py-2 rounded-md cursor-pointer">
+            <button
+              className="border border-3 bg-[#c30808] hover:bg-[#ee0a0a] px-5 py-2 rounded-md cursor-pointer"
+              onClick={() => removing()}
+            >
               Remove
             </button>
             <button

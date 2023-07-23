@@ -10,7 +10,7 @@ const FileUpload = ({ contract, provider, address }) => {
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef(null);
   const [file, setFile] = useState(null);
-  const [fileName, setFileName] = useState("No image selected");
+  const [fileName, setFileName] = useState("No file selected");
   const [loading, setLoading] = useState(false);
 
   //  handle file upload
@@ -125,7 +125,7 @@ const FileUpload = ({ contract, provider, address }) => {
             type="submit"
             disabled={!file}
           >
-            Upload file
+            Upload image
           </button>
         )}
 

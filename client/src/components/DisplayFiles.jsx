@@ -56,7 +56,7 @@ const DisplayFiles = ({ contract, address }) => {
         </h3>
       ) : (
         <h3 className="text-white text-3xl mt-10 text-center">
-          Connect account to your see latest transactions
+          Connect account to your see data !
         </h3>
       )}
       <div className="mt-5 flex flex-row flex-wrap justify-center">{data}</div>
