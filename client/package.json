@@ -10,6 +10,7 @@
     "axios": "^1.4.0",
     "babel-plugin-preval": "^5.1.0",
     "dotenv": "^16.3.1",
+    "ethers": "^6.6.4",
     "fs": "^0.0.1-security",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
