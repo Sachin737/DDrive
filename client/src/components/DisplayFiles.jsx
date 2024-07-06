@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 
 const ImageCard = ({ image, key }) => {
@@ -17,14 +17,16 @@ const DisplayFiles = ({ contract, address }) => {
 
   const getData = async () => {
     try {
+      // console.log("->",address)
+
       // get images for given addr using our smart contract
       let myImages;
       if (inputAddr.length) {
         myImages = await contract.displayItems(inputAddr);
       } else {
         myImages = await contract.displayItems(address);
-        console.log(myImages);
       }
+      // console.log("images:", myImages);
 
       //  converting object to string array
       myImages = myImages.toString().split(",");
@@ -34,9 +36,13 @@ const DisplayFiles = ({ contract, address }) => {
       });
       setData(images);
     } catch (err) {
-      alert("Please request access from owner");
+      // alert("Please request access from owner");
     }
   };
+
+  useEffect(()=>{
+    getData();
+  },[address])
 
   const handleInputChange = (e) => {
     setinputAddr(e.target.value);
